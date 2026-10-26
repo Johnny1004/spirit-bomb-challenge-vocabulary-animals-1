@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#071a42"><title>Spirit Bomb Challenge</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#071229;color:#fff;font-family:Trebuchet MS,Arial,sans-serif}body{display:flex;align-items:center;justify-content:center;overflow:hidden}button{font:inherit;cursor:pointer;touch-action:manipulation}button:disabled{cursor:default;opacity:.46}.choice:disabled{opacity:1;cursor:default}button:focus-visible{outline:3px solid #ffe65b;outline-offset:3px}#game{position:relative;width:min(100vw,177.7778vh);height:min(100vh,56.25vw);aspect-ratio:16/9;overflow:hidden;background:#4eacdf url('background.png') center/100% 100% no-repeat;container-type:inline-size;isolation:isolate;user-select:none}#game.shake{animation:shake .3s linear}#fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:7}.fighter{position:absolute;bottom:3%;height:49%;object-fit:contain;pointer-events:none;z-index:3;filter:drop-shadow(0 .3cqw .12cqw #13121d8c)}#goku{left:8%;transform-origin:bottom center}#goku.throw{left:7%;height:49%;animation:thrust .32s ease-out}#cell{right:8%;height:36.75%;transition:opacity .22s,transform .25s;transform-origin:bottom center}#cell.gone{opacity:0;transform:scale(.92)}.aura{position:absolute;bottom:4%;width:16%;height:49%;pointer-events:none;z-index:2;opacity:.72;filter:blur(.85cqw);border-radius:47% 47% 25% 25%;mix-blend-mode:screen;animation:aura 1.15s ease-in-out infinite alternate}.aura:before,.aura:after{content:"";position:absolute;inset:-5%;border-radius:45% 45% 25% 25%;background:inherit;filter:blur(1.3cqw);animation:aura .85s alternate infinite}.aura:after{inset:8% -14%;animation-duration:1.5s}#gokuAura{left:11%;background:radial-gradient(ellipse at 50% 60%,#fff198a6 0%,#ffe341a8 32%,#ffa50091 55%,transparent 75%)}#cellAura{right:10%;height:36.75%;background:radial-gradient(ellipse at 50% 60%,#ffb8f0a0,#a070ff8c 35%,#aa1bd063 59%,transparent 75%)}#bomb{position:absolute;left:19.2%;top:31%;width:10%;aspect-ratio:1;object-fit:contain;transform:translate(-50%,-50%);z-index:5;pointer-events:none;filter:drop-shadow(0 0 .65cqw #83ffff);transition:width .55s cubic-bezier(.15,1.22,.34,1),filter .3s;animation:bombpulse 1.1s ease-in-out infinite alternate}#bomb.flight{transition:none;animation:none;z-index:8}#bomb.hidden{display:none}.top-ui{position:absolute;top:5%;left:12%;right:12%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5%;z-index:9}.choice{border:2px solid #ff876d;border-radius:.55cqw;background:linear-gradient(180deg,#ff4230,#bd1420);box-shadow:0 .35cqw 0 #650a18,0 .3cqw 1cqw #0007;padding:.7cqw .3cqw;color:white;font-size:clamp(11px,2.12cqw,32px);font-weight:800;min-height:3.6cqw;transition:transform .12s,filter .12s}.choice:not(:disabled):active{transform:translateY(.25cqw);box-shadow:0 .1cqw #650a18}.choice:not(:disabled):hover{filter:brightness(1.18)}.choice.wrong{animation:bad .25s;filter:brightness(.75)}.choice.correct,.choice.correct:disabled{background:linear-gradient(180deg,#38ed70,#07943e);border-color:#baffcf;box-shadow:0 .35cqw 0 #065b28,0 0 1.2cqw #40ff88;filter:none;color:#fff}.question-box{position:absolute;left:23%;right:23%;bottom:21%;z-index:9;background:#111727d9;border:1px solid #ffffff80;border-radius:.75cqw;padding:1.2cqw .7cqw;text-align:center;box-shadow:0 .3cqw 1cqw #0005;font-weight:700;font-size:clamp(11px,2.15cqw,32px);line-height:1.35;text-shadow:0 .12cqw .3cqw #000}.hud{position:absolute;left:32%;bottom:.5%;width:36%;aspect-ratio:3/1;z-index:9}.hud>img{width:100%;height:100%;display:block;pointer-events:none}.segments{position:absolute;left:28.5%;top:36%;width:64.5%;height:25%;display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:.24cqw;overflow:hidden}.seg{background:transparent;border-radius:.18cqw}.seg.on{background:linear-gradient(90deg,#ff9d10,#ffda33,#ff8b00);box-shadow:0 0 .4cqw #ffc136}.meter-caption{position:absolute;left:41%;right:4%;bottom:17%;text-align:center;color:#fff;font-size:clamp(9px,1.25cqw,20px);font-weight:900;text-shadow:1px 2px 4px #000}#mute{position:absolute;top:1%;right:1%;z-index:20;color:white;border:1px solid #a4d8ff;border-radius:30px;background:#09275dbb;padding:.45cqw .8cqw;font-size:clamp(10px,1.15cqw,18px)}#feedback{position:absolute;left:50%;top:17%;transform:translateX(-50%) scale(.76);width:min(58%,1100px);max-width:75%;opacity:0;pointer-events:none;z-index:14;filter:drop-shadow(0 .6cqw 1.1cqw #000b);transition:opacity .14s ease,transform .18s ease}#feedback.show{opacity:1;transform:translateX(-50%) scale(1)}#launch{position:absolute;left:50%;top:12%;transform:translateX(-50%);z-index:11;overflow:hidden;border:2px solid #68d8ff;border-radius:1cqw;background:#06155a;box-shadow:0 0 1.2cqw #35bfff70;color:#422200;font-size:clamp(14px,2.7cqw,38px);font-weight:1000;padding:1.2cqw 3cqw;white-space:nowrap;isolation:isolate;opacity:1}#launch:disabled{opacity:1;cursor:default}#launch::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#ffe376,#ff9400);transform:scaleX(0);transform-origin:left center}#launch .launch-label{display:block;opacity:0;transform:scale(.94)}#launch.filling::before{animation:launchFill 4s linear forwards}#launch.ready{border-color:#fff176;box-shadow:0 0 2.3cqw #ffe058;animation:call 1s ease-in-out infinite alternate}#launch.ready::before{transform:scaleX(1)}#launch.ready .launch-label{opacity:1;transform:scale(1);transition:opacity .16s,transform .2s}#launch.ready:not(:disabled){cursor:pointer}@keyframes launchFill{to{transform:scaleX(1)}}.screen{position:absolute;inset:0;background:#08132cca;z-index:15;display:flex;align-items:center;justify-content:center;padding:3%;overflow:auto}.panel{max-width:800px;width:83%;max-height:95%;overflow:auto;text-align:center;border:2px solid #7ce9ff;border-radius:1.4cqw;background:linear-gradient(150deg,#0d215de8,#071635f2);box-shadow:0 0 3cqw #00b7ff66;padding:2.1cqw 3cqw}.panel h1{font-size:clamp(19px,4cqw,64px);line-height:1.06;color:#ffe15d;text-shadow:0 .25cqw #6d2400;margin:0 0 1cqw}.panel h2{font-size:clamp(13px,2.15cqw,36px);margin:.2cqw 0 1.1cqw}.panel p{font-size:clamp(11px,1.75cqw,26px);line-height:1.42;margin:.85cqw 0}.panel .small{font-size:clamp(10px,1.35cqw,20px);color:#bce9ff}.big-btn{margin-top:1cqw;background:linear-gradient(#ffec75,#f69f19);color:#2a1b06;font-weight:1000;border:2px solid #fff0a9;border-radius:.75cqw;padding:.85cqw 3cqw;font-size:clamp(13px,2.3cqw,34px);box-shadow:0 .35cqw #8d4308}.big-btn:hover{filter:brightness(1.13)}.hidden{display:none!important}#warning{position:absolute;left:2%;bottom:1%;z-index:22;font-size:12px;color:#fff;background:#111b;padding:4px 8px;border-radius:3px}.win-stars{font-size:clamp(20px,4cqw,55px);color:#ffe865;animation:call 1s infinite alternate}@keyframes bombpulse{to{filter:drop-shadow(0 0 1.3cqw #5ff9ff) brightness(1.13)}}@keyframes aura{from{transform:scale(.92,1);opacity:.45}to{transform:scale(1.1,1.08);opacity:1}}@keyframes bad{0%,100%{transform:translateX(0)}25%{transform:translateX(-.3cqw)}75%{transform:translateX(.3cqw)}}@keyframes shake{0%,100%{transform:translate(0)}20%{transform:translate(-.4cqw,.2cqw)}40%{transform:translate(.5cqw,-.2cqw)}60%{transform:translate(-.4cqw,-.2cqw)}80%{transform:translate(.25cqw,.25cqw)}}@keyframes call{to{filter:brightness(1.3);box-shadow:0 0 3cqw #ffec6a}}@keyframes thrust{from{transform:translateX(-1cqw)}to{transform:translateX(0)}}@media(max-width:640px){.panel{width:95%;padding:1.5cqw 2cqw}.panel p{margin:.5cqw 0}.hud{width:40%;left:30%}.question-box{left:21%;right:21%;bottom:22%}.top-ui{left:8%;right:8%}}@media(prefers-reduced-motion:reduce){.aura,#bomb,#launch{animation:none}}
+
+/* Animal photo and answer buttons: keep photo clear and touch targets large. */
+.animal-card{position:absolute;left:41%;top:18%;width:18%;height:35%;z-index:9;background:#061630d6;border:2px solid #a4e7ff;border-radius:1cqw;box-shadow:0 0 1.7cqw #091d4eaa;padding:.6cqw;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.2cqw}.animal-card img{width:100%;height:82%;object-fit:contain;border-radius:.45cqw;background:#ffffffde}.animal-prompt{font-size:clamp(8px,1.15cqw,19px);font-weight:900;color:#fff;text-shadow:1px 1px 3px #000}.top-ui{top:57%;left:28%;right:28%;gap:2%;z-index:12}.choice{font-size:clamp(10px,1.75cqw,26px);min-height:4.2cqw}.hud{z-index:10}#feedback{top:33%;width:57%}#launch{z-index:14}@media(max-width:640px){.top-ui{left:23%;right:23%;top:58%;gap:1.5%}.animal-card{left:39%;width:22%;top:17%;height:37%}.choice{font-size:clamp(8px,1.7cqw,20px)}}
+</style></head>
+<body><main id="game" role="application" aria-label="Spirit Bomb Challenge Animal Vocabulary"><div class="aura" id="gokuAura"></div><div class="aura" id="cellAura"></div><img id="goku" class="fighter" src="goku-charging.png" alt="Goku"><img id="cell" class="fighter" src="frieza.png" alt="Frieza"><img id="bomb" src="spirit-bomb.png" alt="Spirit Bomb"><img id="feedback" class="hidden" src="right.png" alt="Feedback"><canvas id="fx" aria-hidden="true"></canvas>
+<div class="top-ui" id="answers"><button class="choice" data-slot="0"></button><button class="choice" data-slot="1"></button><button class="choice" data-slot="2"></button></div><div class="animal-card" id="question"><img id="animalImage" src="animals/alligator.png" alt="Identify this animal"><div class="animal-prompt">WHAT ANIMAL IS THIS?</div></div>
+<div class="hud" id="hud"><img src="energy-bar.png" alt="Spirit Bomb energy meter"><div class="segments" id="segments"></div><div class="meter-caption" id="meterCaption">0 / 20 ENERGY</div></div><button id="launch" class="hidden" type="button" disabled><span class="launch-label">⚡ LAUNCH BOMB NOW</span></button><button id="mute" type="button" aria-label="Toggle sound">🔊 SOUND ON</button>
+<section class="screen" id="welcome"><div class="panel"><h1>SPIRIT BOMB<br>CHALLENGE</h1><h2>HELP GOKU DEFEAT FRIEZA!</h2><p>Use your animal vocabulary to help Goku charge the Spirit Bomb and defeat Frieza!</p><p>Look at each animal and choose its correct name. Every correct answer makes the Spirit Bomb grow stronger.</p><p>Correctly identify <b>all 20 animals</b> to fully charge the Spirit Bomb. Then launch it at Frieza and save the Earth!</p><p class="small">Wrongly identified animals return later until you get them right. You never lose energy!</p><button class="big-btn" id="start" type="button">▶ START GAME</button></div></section>
+<section class="screen hidden" id="victory"><div class="panel"><div class="win-stars">✦ ★ ✦</div><h1>VICTORY!</h1><h2>FRIEZA DEFEATED!</h2><p>YOU SAVED THE EARTH!</p><p>20 animals identified — 100% Spirit Bomb energy!</p><button class="big-btn" id="replay" type="button">↻ PLAY AGAIN</button></div></section><div id="warning" class="hidden"></div></main>
+<script>
+'use strict';
+// Each animal keeps its two assigned distractors. Images: animals/<name>.png.
+const BANK=[
+  ['alligator','Iguana','Komodo dragon'],
+  ['beaver','Otter','Platypus'],
+  ['beetle','Cockroach','Cricket'],
+  ['bison','Buffalo','Ox'],
+  ['crab','Lobster','Scorpion'],
+  ['deer','Antelope','Gazelle'],
+  ['elk','Moose','Reindeer'],
+  ['fox','Coyote','Jackal'],
+  ['goat','Sheep','Antelope'],
+  ['goose','Swan','Duck'],
+  ['heron','Crane','Stork'],
+  ['lobster','Crayfish','Shrimp'],
+  ['mule','Donkey','Horse'],
+  ['owl','Hawk','Falcon'],
+  ['quail','Partridge','Pheasant'],
+  ['raccoon','Badger','Red panda'],
+  ['raven','Crow','Blackbird'],
+  ['swan','Goose','Flamingo'],
+  ['toad','Frog','Salamander'],
+  ['whale','Dolphin','Seal']
+];
+const $=id=>document.getElementById(id), game=$('game'),canvas=$('fx'),ctx=canvas.getContext('2d');
+const choices=[...document.querySelectorAll('.choice')];
+const segments=Array.from({length:20},()=>{const e=document.createElement('span');e.className='seg';$('segments').append(e);return e});
+const TARGET=20;let deck=[],currentAnimal=null,index=0,energy=0,phase='welcome',busy=false,muted=false,particles=[],blast=null,raf=0,prevT=0;
+const soundFiles={correct:'correct.mp3',wrong:'wrong.mp3',charging:'charging.mp3',screaming:'screaming.mp3',launch:'launch.mp3',explosion:'explosion.mp3',victory:'victory.mp3',bg:'bg-music.mp3'};
+const audio={};for(const [k,src] of Object.entries(soundFiles)){const el=new Audio(src);el.preload='auto';el.loop=k==='bg'||k==='victory';el.volume=k==='bg'?.27:k==='victory'?.65:.8;audio[k]=el;}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr;}
+// Use the student's own MP3s alongside index.html. Missing files remain silent.
+function playSfx(k){
+  if(muted)return;
+  const el=audio[k];
+  if(!el)return;
+  try{el.pause();el.currentTime=0;const pending=el.play();if(pending)pending.catch(()=>{});}catch(e){}
+}
+function stopMusic(){for(const k of ['bg','victory']){audio[k].pause();audio[k].currentTime=0;}}
+function cueDuration(key,fallback,min=350,max=2200){const d=audio[key]?.duration;return Number.isFinite(d)&&d>0?Math.max(min,Math.min(max,d*1000)):fallback}
+function hideFeedback(){const f=$('feedback');f.classList.remove('show');setTimeout(()=>f.classList.add('hidden'),160)}
+function showFeedback(kind){const f=$('feedback');f.src=kind==='right'?'right.png':'wrong.png';f.alt=kind==='right'?"That's correct!":"That's wrong!";f.classList.remove('hidden');requestAnimationFrame(()=>f.classList.add('show'));}
+function startMusic(kind){
+  stopMusic();
+  if(muted)return;
+  const el=audio[kind];
+  if(el){const pending=el.play();if(pending)pending.catch(()=>{});}
+}
+function soundToggle(){muted=!muted;$('mute').textContent=muted?'🔇 SOUND OFF':'🔊 SOUND ON';if(muted)stopMusic();else if(phase==='playing'||phase==='charged')startMusic('bg');else if(phase==='victory')startMusic('victory')}
+$('mute').onclick=soundToggle;
+function resize(){const r=game.getBoundingClientRect();const d=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.setTransform(d,0,0,d,0,0)}new ResizeObserver(resize).observe(game);resize();
+const xy=(x,y)=>({x:x*game.clientWidth/100,y:y*game.clientHeight/100});
+function spawn(x,y,n,color,kind='spark'){for(let i=0;i<n;i++){const theta=Math.random()*Math.PI*2,vel=(kind==='dust'?18:kind==='debris'?70:150)*(0.3+Math.random()*1.3);particles.push({x,y,vx:Math.cos(theta)*vel,vy:Math.sin(theta)*vel-(kind==='dust'?25:0),life:kind==='dust'?2+Math.random()*1.5:.3+Math.random()*.8,max:kind==='dust'?3.5:1.1,size:kind==='dust'?9+Math.random()*23:kind==='debris'?2+Math.random()*5:1+Math.random()*4,color,kind})}}
+function updateEffects(dt){const w=game.clientWidth,h=game.clientHeight;ctx.clearRect(0,0,w,h);if(phase==='playing'||phase==='charged'){if(Math.random()<.28){for(const [xp,yp,c] of [[18,58,'#ffd835'],[82,56,'#8aff79']]){const p=xy(xp+(Math.random()-.5)*9,yp+(Math.random()-.5)*20);particles.push({x:p.x,y:p.y,vx:(Math.random()-.5)*18,vy:-25-Math.random()*50,life:.35,max:.35,size:1+Math.random()*3,color:c,kind:'spark'})}}}
+for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.life-=dt;if(p.life<=0){particles.splice(i,1);continue}p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.kind==='dust'){p.vx*=.993;p.vy-=4*dt}else if(p.kind==='debris')p.vy+=170*dt;ctx.globalAlpha=Math.min(1,p.life/(p.kind==='dust'?2:.35))*(p.kind==='dust'?.35:1);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size*(p.kind==='dust'?(1+(p.max-p.life)*.65):1),0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;
+if(blast){blast.r+=dt* Math.max(w,h)*.8;blast.life-=dt;if(blast.life<=0)blast=null;else{const g=ctx.createRadialGradient(blast.x,blast.y,0,blast.x,blast.y,blast.r);g.addColorStop(0,'#fff');g.addColorStop(.3,'#b9ffffd9');g.addColorStop(.75,'#00bffb66');g.addColorStop(1,'#05d6ff00');ctx.globalAlpha=Math.min(1,blast.life*2);ctx.fillStyle=g;ctx.beginPath();ctx.arc(blast.x,blast.y,blast.r,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}}}
+function loop(t){const dt=Math.min(.06,(t-prevT)/1000||.016);prevT=t;updateEffects(dt);raf=requestAnimationFrame(loop)}raf=requestAnimationFrame(loop);
+function updateCharge(){segments.forEach((e,i)=>e.classList.toggle('on',i<energy));$('meterCaption').textContent=`${energy} / ${TARGET} ENERGY`;const size=10+15*(energy/TARGET);$('bomb').style.width=`${size}%`;const intensity=energy/TARGET;$('gokuAura').style.opacity=String(.55+intensity*.45);$('gokuAura').style.filter=`blur(.85cqw) brightness(${1+intensity*.7})`}
+function questionNext(){
+  if(energy>=TARGET){chargeDone();return}
+  if(deck.length===0){console.warn('No remaining animals');return}
+  const q=deck.shift();currentAnimal=q;
+  $('animalImage').src=`animals/${q[0]}.png`;
+  $('animalImage').alt='Which animal is this?';
+  const answers=shuffle([q[0],q[1],q[2]]);
+  choices.forEach((b,i)=>{b.textContent=answers[i].toUpperCase();b.dataset.correct=String(answers[i]===q[0]);b.disabled=false;b.classList.remove('wrong','correct')});
+  busy=false;
+}
+function answerClick(e){
+ if(phase!=='playing'||busy)return;
+ busy=true;
+ const b=e.currentTarget;
+ choices.forEach(x=>x.disabled=true);
+ if(b.dataset.correct==='true'){
+   b.classList.add('correct');playSfx('correct');showFeedback('right');energy++;updateCharge();
+   const pos=xy(19.2,31);spawn(pos.x,pos.y,15,'#96faff');
+   const delay=cueDuration('correct',900,700,1900);
+   setTimeout(()=>{hideFeedback();if(phase==='playing')questionNext()},delay);
+ }else{
+   playSfx('wrong');showFeedback('wrong');
+   // Reinsert the failed animal later, never immediately unless it is the only one left.
+   const postpone=Math.min(deck.length, Math.max(1,2+Math.floor(Math.random()*4)));
+   deck.splice(postpone,0,currentAnimal);
+   $('answers').classList.add('hidden');$('question').classList.add('hidden');
+   const delay=cueDuration('wrong',800,650,1800);
+   setTimeout(()=>{hideFeedback();if(phase!=='playing')return;questionNext();$('answers').classList.remove('hidden');$('question').classList.remove('hidden')},delay);
+ }
+}
+choices.forEach(b=>b.addEventListener('click',answerClick));
+function chargeDone(){phase='charged';busy=true;$('answers').classList.add('hidden');$('question').classList.add('hidden');const btn=$('launch');btn.classList.remove('ready','filling','hidden');btn.disabled=true;void btn.offsetWidth;btn.classList.add('filling');/* The scream starts alongside the four-second fill and plays to its natural end. */playSfx('screaming');setTimeout(()=>{if(phase!=='charged')return;btn.classList.remove('filling');btn.classList.add('ready');btn.disabled=false},4000)}
+function start(){audio.screaming.pause();audio.screaming.currentTime=0;audio.screaming.load();stopMusic();phase='playing';busy=false;energy=0;index=0;deck=shuffle(BANK.slice());currentAnimal=null;particles=[];blast=null;$('goku').src='goku-charging.png';$('goku').classList.remove('throw');$('cell').classList.remove('gone');$('bomb').className='';$('bomb').style.left='19.2%';$('bomb').style.top='31%';$('bomb').style.width='10%';$('gokuAura').classList.remove('hidden');$('cellAura').classList.remove('hidden');$('answers').classList.remove('hidden');$('question').classList.remove('hidden');$('hud').classList.remove('hidden');$('launch').classList.add('hidden');$('launch').classList.remove('ready','filling');$('launch').disabled=true;$('victory').classList.add('hidden');$('welcome').classList.add('hidden');hideFeedback();$('feedback').classList.add('hidden');updateCharge();questionNext();startMusic('bg')}
+$('start').onclick=start;$('replay').onclick=start;
+function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+async function launch(){if(phase!=='charged'||$('launch').disabled)return;phase='firing';hideFeedback();$('launch').classList.add('hidden');$('question').classList.add('hidden');stopMusic();playSfx('launch');const b=$('bomb'),g=$('goku');g.src='goku-throwing.png';g.classList.add('throw');b.classList.add('flight');const startX=19.2,startY=31,endX=82,endY=56;const startTime=performance.now(),dur=1150;await new Promise(resolve=>{function fly(t){const v=Math.min(1,(t-startTime)/dur),e=v*v*(3-2*v);b.style.left=`${startX+(endX-startX)*e}%`;b.style.top=`${startY+(endY-startY)*e}%`;b.style.width=`${25+3*e}%`;const p=xy(startX+(endX-startX)*e,startY+(endY-startY)*e);spawn(p.x,p.y,2,'#86faff');if(v<1)requestAnimationFrame(fly);else resolve()}requestAnimationFrame(fly)});b.classList.add('hidden');const hit=xy(endX,endY);blast={x:hit.x,y:hit.y,r:1,life:1};spawn(hit.x,hit.y,65,'#96eaff');spawn(hit.x,hit.y,30,'#9c825f','debris');$('cell').classList.add('gone');$('cellAura').classList.add('hidden');game.classList.add('shake');playSfx('explosion');setTimeout(()=>game.classList.remove('shake'),340);await wait(570);spawn(hit.x,hit.y+game.clientHeight*.2,48,'#ba9d75','dust');spawn(hit.x,hit.y+game.clientHeight*.2,24,'#dfc396','dust');await wait(2750);phase='victory';$('victory').classList.remove('hidden');startMusic('victory')}
+$('launch').onclick=launch;
+// Place MP3s, Frieza/Goku PNGs, and right.png/wrong.png beside index.html; animal PNGs go into animals/.
+</script></body></html>
