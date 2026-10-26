@@ -7,13 +7,13 @@
 .animal-card{position:absolute;left:41%;top:18%;width:18%;height:35%;z-index:9;background:#061630d6;border:2px solid #a4e7ff;border-radius:1cqw;box-shadow:0 0 1.7cqw #091d4eaa;padding:.6cqw;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.2cqw}.animal-card img{width:100%;height:82%;object-fit:contain;border-radius:.45cqw;background:#ffffffde}.animal-prompt{font-size:clamp(8px,1.15cqw,19px);font-weight:900;color:#fff;text-shadow:1px 1px 3px #000}.top-ui{top:57%;left:28%;right:28%;gap:2%;z-index:12}.choice{font-size:clamp(10px,1.75cqw,26px);min-height:4.2cqw}.hud{z-index:10}#feedback{top:33%;width:57%}#launch{z-index:14}@media(max-width:640px){.top-ui{left:23%;right:23%;top:58%;gap:1.5%}.animal-card{left:39%;width:22%;top:17%;height:37%}.choice{font-size:clamp(8px,1.7cqw,20px)}}
 </style></head>
 <body><main id="game" role="application" aria-label="Spirit Bomb Challenge Animal Vocabulary"><div class="aura" id="gokuAura"></div><div class="aura" id="cellAura"></div><img id="goku" class="fighter" src="goku-charging.png" alt="Goku"><img id="cell" class="fighter" src="frieza.png" alt="Frieza"><img id="bomb" src="spirit-bomb.png" alt="Spirit Bomb"><img id="feedback" class="hidden" src="right.png" alt="Feedback"><canvas id="fx" aria-hidden="true"></canvas>
-<div class="top-ui" id="answers"><button class="choice" data-slot="0"></button><button class="choice" data-slot="1"></button><button class="choice" data-slot="2"></button></div><div class="animal-card" id="question"><img id="animalImage" src="animals/alligator.png" alt="Identify this animal"><div class="animal-prompt">WHAT ANIMAL IS THIS?</div></div>
+<div class="top-ui" id="answers"><button class="choice" data-slot="0"></button><button class="choice" data-slot="1"></button><button class="choice" data-slot="2"></button></div><div class="animal-card" id="question"><img id="animalImage" src="alligator.png" alt="Identify this animal"><div class="animal-prompt">WHAT ANIMAL IS THIS?</div></div>
 <div class="hud" id="hud"><img src="energy-bar.png" alt="Spirit Bomb energy meter"><div class="segments" id="segments"></div><div class="meter-caption" id="meterCaption">0 / 20 ENERGY</div></div><button id="launch" class="hidden" type="button" disabled><span class="launch-label">⚡ LAUNCH BOMB NOW</span></button><button id="mute" type="button" aria-label="Toggle sound">🔊 SOUND ON</button>
 <section class="screen" id="welcome"><div class="panel"><h1>SPIRIT BOMB<br>CHALLENGE</h1><h2>HELP GOKU DEFEAT FRIEZA!</h2><p>Use your animal vocabulary to help Goku charge the Spirit Bomb and defeat Frieza!</p><p>Look at each animal and choose its correct name. Every correct answer makes the Spirit Bomb grow stronger.</p><p>Correctly identify <b>all 20 animals</b> to fully charge the Spirit Bomb. Then launch it at Frieza and save the Earth!</p><p class="small">Wrongly identified animals return later until you get them right. You never lose energy!</p><button class="big-btn" id="start" type="button">▶ START GAME</button></div></section>
 <section class="screen hidden" id="victory"><div class="panel"><div class="win-stars">✦ ★ ✦</div><h1>VICTORY!</h1><h2>FRIEZA DEFEATED!</h2><p>YOU SAVED THE EARTH!</p><p>20 animals identified — 100% Spirit Bomb energy!</p><button class="big-btn" id="replay" type="button">↻ PLAY AGAIN</button></div></section><div id="warning" class="hidden"></div></main>
 <script>
 'use strict';
-// Each animal keeps its two assigned distractors. Images: animals/<name>.png.
+// Each animal keeps its two assigned distractors. Images: <name>.png in the repository root.
 const BANK=[
   ['alligator','Iguana','Komodo dragon'],
   ['beaver','Otter','Platypus'],
@@ -74,7 +74,7 @@ function questionNext(){
   if(energy>=TARGET){chargeDone();return}
   if(deck.length===0){console.warn('No remaining animals');return}
   const q=deck.shift();currentAnimal=q;
-  $('animalImage').src=`animals/${q[0]}.png`;
+  $('animalImage').src=`${q[0]}.png`;
   $('animalImage').alt='Which animal is this?';
   const answers=shuffle([q[0],q[1],q[2]]);
   choices.forEach((b,i)=>{b.textContent=answers[i].toUpperCase();b.dataset.correct=String(answers[i]===q[0]);b.disabled=false;b.classList.remove('wrong','correct')});
@@ -107,5 +107,5 @@ $('start').onclick=start;$('replay').onclick=start;
 function wait(ms){return new Promise(r=>setTimeout(r,ms))}
 async function launch(){if(phase!=='charged'||$('launch').disabled)return;phase='firing';hideFeedback();$('launch').classList.add('hidden');$('question').classList.add('hidden');stopMusic();playSfx('launch');const b=$('bomb'),g=$('goku');g.src='goku-throwing.png';g.classList.add('throw');b.classList.add('flight');const startX=19.2,startY=31,endX=82,endY=56;const startTime=performance.now(),dur=1150;await new Promise(resolve=>{function fly(t){const v=Math.min(1,(t-startTime)/dur),e=v*v*(3-2*v);b.style.left=`${startX+(endX-startX)*e}%`;b.style.top=`${startY+(endY-startY)*e}%`;b.style.width=`${25+3*e}%`;const p=xy(startX+(endX-startX)*e,startY+(endY-startY)*e);spawn(p.x,p.y,2,'#86faff');if(v<1)requestAnimationFrame(fly);else resolve()}requestAnimationFrame(fly)});b.classList.add('hidden');const hit=xy(endX,endY);blast={x:hit.x,y:hit.y,r:1,life:1};spawn(hit.x,hit.y,65,'#96eaff');spawn(hit.x,hit.y,30,'#9c825f','debris');$('cell').classList.add('gone');$('cellAura').classList.add('hidden');game.classList.add('shake');playSfx('explosion');setTimeout(()=>game.classList.remove('shake'),340);await wait(570);spawn(hit.x,hit.y+game.clientHeight*.2,48,'#ba9d75','dust');spawn(hit.x,hit.y+game.clientHeight*.2,24,'#dfc396','dust');await wait(2750);phase='victory';$('victory').classList.remove('hidden');startMusic('victory')}
 $('launch').onclick=launch;
-// Place MP3s, Frieza/Goku PNGs, and right.png/wrong.png beside index.html; animal PNGs go into animals/.
+// Place MP3s, Frieza/Goku PNGs, and right.png/wrong.png beside index.html; animal PNGs are beside index.html.
 </script></body></html>
